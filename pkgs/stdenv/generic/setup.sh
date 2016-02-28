@@ -245,7 +245,6 @@ for i in $initialPath ; do
       i=
     fi
     addToSearchPath 'PATH' "$i/bin"
-    addToSearchPath 'PATH' "$i/sbin"
 done
 
 if [ "$NIX_DEBUG" = 1 ] ; then
@@ -298,7 +297,11 @@ findInputs() {
     source "$pkg"
   fi
 
-  if [ -f "$pkg/nix-support/setup-hook" ] ; then
+  if [ -d $1/bin ]; then
+    addToSearchPath _PATH $1/bin
+  fi
+
+  if [ -f "$pkg/nix-support/setup-hook" ]; then
     source "$pkg/nix-support/setup-hook"
   fi
 
