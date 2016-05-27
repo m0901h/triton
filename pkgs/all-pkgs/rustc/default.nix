@@ -58,6 +58,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit srcVerification;
+    bootstrap = rustc_bootstrap;
   };
 
   meta = with stdenv.lib; {

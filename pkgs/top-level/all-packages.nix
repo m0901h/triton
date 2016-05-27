@@ -2125,15 +2125,18 @@ rtorrent = callPackage ../all-pkgs/rtorrent { };
 
 ruby = callPackage ../all-pkgs/ruby { };
 
-rustc = hiPrio (callPackage ../all-pkgs/rustc { });
+rustPackages = recurseIntoAttrs (callPackage ./rust-packages.nix {
+  self = callPackageAlias "rustPackages" { };
+  channel = "stable";
+});
 
-rustc_bootstrap = lowPrio (callPackage ../all-pkgs/rustc/bootstrap.nix { });
-
-rustc_beta = callPackageAlias "rustc" {
+rustPackages_beta = callPackageAlias "rustPackages" {
+  self = callPackageAlias "rustPackages_beta" { };
   channel = "beta";
 };
 
-rustc_dev = callPackageAlias "rustc" {
+rustPackages_dev = callPackageAlias "rustPackages" {
+  self = callPackageAlias "rustPackages_dev" { };
   channel = "dev";
 };
 
