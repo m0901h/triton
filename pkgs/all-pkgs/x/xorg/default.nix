@@ -3535,15 +3535,15 @@ let
   }) // {inherit libX11 libXi ;};
 
   xorgserver = (mkDerivation "xorgserver" {
-    name = "xorg-server-1.18.4";
+    name = "xorg-server-1.19.0";
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
-      sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
+      url = mirror://xorg/individual/xserver/xorg-server-1.19.0.tar.bz2;
+      sha256 = "18sd1qhxdfj37ik0qvcf07nbxq7bsbflb3dr81d2vz5ya25p16hl";
     };
     nativeBuildInputs = [ bison flex utilmacros ];
-    buildInputs = [ bigreqsproto compositeproto damageproto dbus libdmx dmxproto mesa_noglu dri2proto dri3proto libepoxy fixesproto fontsproto glproto inputproto kbproto libdrm systemd_lib libunwind openssl libpciaccess pixman presentproto randrproto recordproto renderproto resourceproto scrnsaverproto videoproto wayland windowswmproto libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libxshmfence libXt xtrans libXtst ];
+    buildInputs = [ bigreqsproto compositeproto damageproto dbus libdmx dmxproto mesa_noglu dri2proto dri3proto libepoxy fixesproto fontsproto glproto inputproto kbproto libdrm systemd_lib libunwind openssl libpciaccess pixman presentproto randrproto recordproto renderproto resourceproto scrnsaverproto videoproto wayland windowswmproto libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86vidmodeproto libXfixes libXfont2 libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libxshmfence libXt xtrans libXtst ];
 
-  }) // {inherit bigreqsproto compositeproto damageproto dbus libdmx dmxproto mesa_noglu dri2proto dri3proto libepoxy fixesproto fontsproto glproto inputproto kbproto libdrm systemd_lib libunwind openssl libpciaccess pixman presentproto randrproto recordproto renderproto resourceproto scrnsaverproto videoproto wayland windowswmproto libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86vidmodeproto libXfixes libXfont libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libxshmfence libXt xtrans libXtst ;};
+  }) // {inherit bigreqsproto compositeproto damageproto dbus libdmx dmxproto mesa_noglu dri2proto dri3proto libepoxy fixesproto fontsproto glproto inputproto kbproto libdrm systemd_lib libunwind openssl libpciaccess pixman presentproto randrproto recordproto renderproto resourceproto scrnsaverproto videoproto wayland windowswmproto libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil xcmiscproto libXdmcp libXext xextproto xf86bigfontproto xf86dgaproto xf86driproto xf86vidmodeproto libXfixes libXfont2 libXi xineramaproto libxkbfile libXmu libXpm xproto libXrender libXres libxshmfence libXt xtrans libXtst ;};
 
   xorgsgmldoctools = (mkDerivation "xorgsgmldoctools" {
     name = "xorg-sgml-doctools-1.11";
