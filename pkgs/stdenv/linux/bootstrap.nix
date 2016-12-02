@@ -21,15 +21,13 @@ if [ hostSystem ] == lib.platforms.x86_64-linux then {
     executable = true;
   };
 
-  bootstrapTools = makeUrls {
+  bootstrap-tools = makeUrls {
     file = "bootstrap-tools.tar.xz";
     nix-hash = "rimjf9i78mfc3k7xzznwgnrrjjbsgsii";
     multihash = "QmZNS3KdwfaFuXgmp4aVnQiHARZNeMsTSUek4x7tXQ4nAC";
     sha256 = "04rxw6d0rnhhyan0g8wkn4yrx10bydh2958fpzdfr1d33yy6w85b";
   };
 
-  langC = true;
-  langCC = true;
   isGNU = true;
 } else if [ hostSystem ] == lib.platforms.i686-linux then {
   busybox = makeUrls {
@@ -40,15 +38,13 @@ if [ hostSystem ] == lib.platforms.x86_64-linux then {
     executable = true;
   };
 
-  bootstrapTools = makeUrls {
+  bootstrap-tools = makeUrls {
     file = "bootstrap-tools.tar.xz";
     nix-hash = "66zksl5jd4yq07nlz1p6a2nmlq6qcn60";
     multihash = "QmR4pkiPEjFMdnZj6Z2UbWvZzvwTxyuDVmor1Qicd5j7Ed";
     sha256 = "00b6bwz6ij4734w8fj89gchann6yncz0y2n9wa34b5ixcfzkz0zn";
   };
 
-  langC = true;
-  langCC = true;
   isGNU = true;
 } else
   throw "Unsupported System ${hostSystem}"

@@ -4,14 +4,11 @@
 , mpfr
 }:
 
-let
-  version = "1.0.3";
-in
 stdenv.mkDerivation rec {
-  name = "libmpc-${version}";
+  name = "mpc-1.0.3";
 
   src = fetchurl {
-    url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
+    url = "http://www.multiprecision.org/mpc/download/${name}.tar.gz";
     hashOutput = false;
     sha256 = "1hzci2zrrd7v3g1jk35qindq05hbl0bhjcyyisq9z209xb3fqzb1";
   };

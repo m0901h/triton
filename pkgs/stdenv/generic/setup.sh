@@ -700,9 +700,15 @@ configurePhase() {
     fi
   fi
 
+  local actualFlags
+  actualFlags=(
+    $configureFlags
+    "${configureFlagsArray[@]}"
+  )
+
   if [ -n "$configureScript" ] ; then
-    echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags "${configureFlagsArray[@]}"
+    printFlags "configure"
+    $configureScript "${actualFlags[@]}"
   else
     echo "no configure script, doing nothing"
   fi
@@ -717,32 +723,32 @@ commonMakeFlags() {
   local parallelVar
   parallelVar="parallel${phaseName^}"
 
-  actualMakeFlags=()
+  actualFlags=()
   if [ -n "$makefile" ] ; then
-    actualMakeFlags+=('-f' "$makefile")
+    actualFlags+=('-f' "$makefile")
   fi
   if [ -n "${!parallelVar-true}" ] ; then
-    actualMakeFlags+=("-j${NIX_BUILD_CORES}" "-l${NIX_BUILD_CORES}")
+    actualFlags+=("-j${NIX_BUILD_CORES}" "-l${NIX_BUILD_CORES}")
   fi
-  actualMakeFlags+=("SHELL=$SHELL") # Needed for https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-  actualMakeFlags+=($makeFlags)
-  actualMakeFlags+=("${makeFlagsArray[@]}")
+  actualFlags+=("SHELL=$SHELL") # Needed for https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
+  actualFlags+=($makeFlags)
+  actualFlags+=("${makeFlagsArray[@]}")
   local flagsVar
   flagsVar="${phaseName}Flags"
-  actualMakeFlags+=(${!flagsVar})
+  actualFlags+=(${!flagsVar})
   local arrayVar
   arrayVar="${phaseName}FlagsArray[@]"
-  actualMakeFlags+=("${!arrayVar}")
+  actualFlags+=("${!arrayVar}")
 }
 
-printMakeFlags() {
+printFlags() {
   local phaseName
   phaseName="$1"
 
   echo "$phaseName flags:"
 
   local flag
-  for flag in "${actualMakeFlags[@]}" ; do
+  for flag in "${actualFlags[@]}" ; do
     echo "  $flag"
   done
 }
@@ -753,10 +759,10 @@ buildPhase() {
   if [ -z "$makeFlags" ] && ! [ -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile" ] ; then
     echo "no Makefile, doing nothing"
   else
-    local actualMakeFlags
+    local actualFlags
     commonMakeFlags 'build'
-    printMakeFlags 'build'
-    make "${actualMakeFlags[@]}"
+    printFlags 'build'
+    make "${actualFlags[@]}"
   fi
 
   runHook 'postBuild'
@@ -766,12 +772,12 @@ buildPhase() {
 checkPhase() {
   runHook 'preCheck'
 
-  local actualMakeFlags
+  local actualFlags
   commonMakeFlags 'check'
-  actualMakeFlags+=(${checkFlags:-VERBOSE=y})
-  actualMakeFlags+=(${checkTarget:-check})
-  printMakeFlags 'check'
-  make "${actualMakeFlags[@]}"
+  actualFlags+=(${checkFlags:-VERBOSE=y})
+  actualFlags+=(${checkTarget:-check})
+  printFlags 'check'
+  make "${actualFlags[@]}"
 
   runHook 'postCheck'
 }
@@ -782,11 +788,11 @@ installPhase() {
 
   mkdir -p "$prefix"
 
-  local actualMakeFlags
+  local actualFlags
   commonMakeFlags 'install'
-  actualMakeFlags+=(${installTargets:-install})
-  printMakeFlags 'install'
-  make "${actualMakeFlags[@]}"
+  actualFlags+=(${installTargets:-install})
+  printFlags 'install'
+  make "${actualFlags[@]}"
 
   runHook 'postInstall'
 }
@@ -871,16 +877,35 @@ distPhase() {
 
 showPhaseHeader() {
   local phase="$1"
-  case "$phase" in
-    'unpackPhase') header 'unpacking sources' ;;
-    'patchPhase') header 'patching sources' ;;
-    'configurePhase') header 'configuring' ;;
-    'buildPhase') header 'building' ;;
-    'checkPhase') header 'running tests' ;;
-    'installPhase') header 'installing' ;;
-    'fixupPhase') header 'post-installation fixup' ;;
-    'installCheckPhase') header 'running install tests' ;;
-    *) header "$phase" ;;
+
+  case $phase in
+    'unpackPhase')
+      header "############### unpacking sources $name ###############"
+      ;;
+    'patchPhase')
+      header "############### patching sources  $name ###############"
+      ;;
+    'configurePhase')
+      header "############### configuring       $name ###############"
+      ;;
+    'buildPhase')
+      header "############### building          $name ###############"
+      ;;
+    'checkPhase')
+      header "############### testing           $name ###############"
+      ;;
+    'installPhase')
+      header "############### installing        $name ###############"
+      ;;
+    'fixupPhase')
+      header "############### fixup             $name ###############"
+      ;;
+    'installCheckPhase')
+      header "############### install testing   $name ###############"
+      ;;
+    *)
+      header "############## $phase             $name ###############"
+      ;;
   esac
 }
 

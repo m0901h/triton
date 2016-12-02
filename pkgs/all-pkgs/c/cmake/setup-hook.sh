@@ -36,9 +36,14 @@ cmakeConfigurePhase() {
       "-DCMAKE_SKIP_BUILD_RPATH=ON"
     )
 
-    echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
+    local actualFlags
+    actualFlags=(
+      $cmakeFlags
+      "${cmakeFlagsArray[@]}"
+    )
 
-    cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
+    printFlags "cmake"
+    cmake ${cmakeDir:-.} "${actualFlags[@]}"
 
     eval "$postConfigure"
 }

@@ -1,6 +1,8 @@
 { stdenv
 , fetchurl
+
 , channel
+, bootstrap ? false
 }:
 
 let
@@ -18,19 +20,22 @@ let
   };
 
   source = sources."${channel}";
+  inherit (sources."${channel}")
+    major
+    sha256
+    version;
 
   tarballUrls = [
-    "mirror://kernel/linux/kernel/v${source.major}.x/linux-${source.version}.tar"
+    "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar"
   ];
 in
 stdenv.mkDerivation rec {
-  name = "linux-headers-${source.version}";
-  version = source.version;
+  name = "${if bootstrap then "bootstrap-" else ""}linux-headers-${version}";
 
   src = fetchurl {
     urls = map (n: "${n}.xz") tarballUrls;
     hashOutput = false;
-    inherit (source) sha256;
+    inherit sha256;
   };
 
   buildFlags = [
@@ -47,6 +52,11 @@ stdenv.mkDerivation rec {
     # Cleanup some unneeded files
     find $out/include \( -name .install -o -name ..install.cmd \) -delete
   '';
+
+  ccFixFlags = !bootstrap;
+
+  # The linux-headers do not need to maintain any references
+  allowedReferences = [ ];
 
   passthru = {
     srcVerification = fetchurl {

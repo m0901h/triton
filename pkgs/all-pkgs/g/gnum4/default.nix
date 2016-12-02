@@ -1,10 +1,14 @@
 { stdenv
 , fetchurl
+
+, bootstrap ? false
 }:
 
-stdenv.mkDerivation rec {
-  name = "gnum4-${version}";
+let
   version = "1.4.17";
+in
+stdenv.mkDerivation rec {
+  name = "${if bootstrap then "bootstrap-" else ""}gnum4-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${version}.tar.bz2";
@@ -17,6 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  ccFixFlags = !bootstrap;
 
   meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/m4/;
